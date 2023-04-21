@@ -275,7 +275,8 @@ def train(
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
 
-    trainer.train(resume_from_checkpoint=resume_from_checkpoint)
+    # trainer.train(resume_from_checkpoint=resume_from_checkpoint)
+    trainer.train()
 
     model.save_pretrained(output_dir)
 
