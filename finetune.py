@@ -21,7 +21,7 @@ from peft import (
     prepare_model_for_int8_training,
     set_peft_model_state_dict,
 )
-from transformers import LlamaForCausalLM, LlaMATokenizer
+from transformers import LlamaForCausalLM, LlamaTokenizer
 
 from utils.prompter import Prompter
 
@@ -117,7 +117,7 @@ def train(
         device_map=device_map,
     )
 
-    tokenizer = LlaMATokenizer.from_pretrained(base_model)
+    tokenizer = LlamaTokenizer.from_pretrained(base_model)
 
     tokenizer.pad_token_id = (
         0  # unk. we want this to be different from the eos token
