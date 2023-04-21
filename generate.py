@@ -32,9 +32,7 @@ def main(
     share_gradio: bool = False,
 ):
     base_model = base_model or os.environ.get("BASE_MODEL", "")
-    assert (
-        base_model
-    ), "Please specify a --base_model, e.g. --base_model='huggyllama/llama-7b'"
+    assert base_model, "Please specify a --base_model, e.g. --base_model='huggyllama/llama-7b'"
 
     prompter = Prompter(prompt_template)
     tokenizer = LlamaTokenizer.from_pretrained(base_model)
@@ -63,9 +61,7 @@ def main(
             torch_dtype=torch.float16,
         )
     else:
-        model = LlamaForCausalLM.from_pretrained(
-            base_model, device_map={"": device}, low_cpu_mem_usage=True
-        )
+        model = LlamaForCausalLM.from_pretrained(base_model, device_map={"": device}, low_cpu_mem_usage=True)
         model = PeftModel.from_pretrained(
             model,
             lora_weights,
@@ -120,19 +116,13 @@ def main(
             # from https://github.com/oobabooga/text-generation-webui/blob/ad37f396fc8bcbab90e11ecf17c56c97bfbd4a9c/modules/text_generation.py#L216-L243.
 
             def generate_with_callback(callback=None, **kwargs):
-                kwargs.setdefault(
-                    "stopping_criteria", transformers.StoppingCriteriaList()
-                )
-                kwargs["stopping_criteria"].append(
-                    Stream(callback_func=callback)
-                )
+                kwargs.setdefault("stopping_criteria", transformers.StoppingCriteriaList())
+                kwargs["stopping_criteria"].append(Stream(callback_func=callback))
                 with torch.no_grad():
                     model.generate(**kwargs)
 
             def generate_with_streaming(**kwargs):
-                return Iteratorize(
-                    generate_with_callback, kwargs, callback=None
-                )
+                return Iteratorize(generate_with_callback, kwargs, callback=None)
 
             with generate_with_streaming(**generate_params) as generator:
                 for output in generator:
@@ -164,24 +154,14 @@ def main(
             gr.components.Textbox(
                 lines=2,
                 label="Instruction",
-                placeholder="Tell me about alpacas.",
+                placeholder="Tell me about Marx.",
             ),
             gr.components.Textbox(lines=2, label="Input", placeholder="none"),
-            gr.components.Slider(
-                minimum=0, maximum=1, value=0.1, label="Temperature"
-            ),
-            gr.components.Slider(
-                minimum=0, maximum=1, value=0.75, label="Top p"
-            ),
-            gr.components.Slider(
-                minimum=0, maximum=100, step=1, value=40, label="Top k"
-            ),
-            gr.components.Slider(
-                minimum=1, maximum=4, step=1, value=4, label="Beams"
-            ),
-            gr.components.Slider(
-                minimum=1, maximum=2000, step=1, value=128, label="Max tokens"
-            ),
+            gr.components.Slider(minimum=0, maximum=1, value=0.1, label="Temperature"),
+            gr.components.Slider(minimum=0, maximum=1, value=0.75, label="Top p"),
+            gr.components.Slider(minimum=0, maximum=100, step=1, value=40, label="Top k"),
+            gr.components.Slider(minimum=1, maximum=4, step=1, value=4, label="Beams"),
+            gr.components.Slider(minimum=1, maximum=2000, step=1, value=128, label="Max tokens"),
             gr.components.Checkbox(label="Stream output"),
         ],
         outputs=[
@@ -190,9 +170,9 @@ def main(
                 label="Output",
             )
         ],
-        title="🦙🌲 Alpaca-LoRA",
-        description="Alpaca-LoRA is a 7B-parameter LLaMA model finetuned to follow instructions. It is trained on the [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) dataset and makes use of the Huggingface LLaMA implementation. For more information, please visit [the project's website](https://github.com/tloen/alpaca-lora).",  # noqa: E501
-    ).queue().launch(server_name="0.0.0.0", share=share_gradio)
+        title="Genosse",
+        description="Genosse is a 7B-parameter LLaMA model finetuned to follow instructions, with a communist bias. It is trained on the [Chuplares](https://github.com/chuplares/aurora-ia/tree/main/data) dataset and makes use of the Huggingface LLaMA implementation. For more information, please visit [the project's website](https://github.com/bjornaer/genosse).",  # noqa: E501
+    ).queue().launch(server_name=server_name, share=share_gradio)
     # Old testing code follows.
 
     """

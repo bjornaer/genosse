@@ -13,10 +13,9 @@ import torch.nn as nn
 import bitsandbytes as bnb
 """
 
-from peft import (
+from peft import (  # PeftModel,
     LoraConfig,
     get_peft_model,
-    # PeftModel,
     get_peft_model_state_dict,
     prepare_model_for_int8_training,
     set_peft_model_state_dict,

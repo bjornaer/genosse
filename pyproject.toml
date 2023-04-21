@@ -1,8 +1,37 @@
 [tool.black]
-line-length = 79
+line-length = 120
 
 [tool.isort]
 include_trailing_comma = true
-line_length = 79
+line_length = 120
 multi_line_output = 3
 profile = "black"
+
+[tool.poetry]
+name = "genosse"
+version = "0.1.0"
+description = "commie ml model based off alpaca-lora"
+authors = ["bjornaer <maxemijo@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+accelerate = "^0.18.0"
+appdirs = "^1.4.4"
+loralib = "^0.1.1"
+bitsandbytes = "^0.38.1"
+datasets = "^2.11.0"
+fire = "^0.5.0"
+peft = {git = "https://github.com/huggingface/peft.git"}
+transformers = "^4.28.0"
+sentencepiece = "^0.1.98"
+gradio = "^3.27.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = {extras = ["jupyter"], version = "^23.3.0"}
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

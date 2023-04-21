@@ -1,3 +1,17 @@
 {
-    "python.formatting.provider": "black"
+    "editor.rulers": [
+        105,
+        120
+    ],
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+    "python.formatting.provider": "black", // black guidelines
+    "isort.args": [
+        "--profile",
+        "black"
+    ],
+    "editor.formatOnSave": true
 }

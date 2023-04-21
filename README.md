@@ -12,14 +12,16 @@ Data aptly provided by [chuplares](https://github.com/chuplares/aurora-ia/tree/m
 Visit their project!
 
 ### Local Setup
+1. Install poetry
 
-1. Install dependencies
+    curl -sSL https://install.python-poetry.org | python3 -
+
+
+2. Install dependencie
 
    ```bash
-   pip install -r requirements.txt
+   poetry install
    ```
-
-1. If bitsandbytes doesn't work, [install it from source.](https://github.com/TimDettmers/bitsandbytes/blob/main/compile_from_source.md) Windows users can follow [these instructions](https://github.com/tloen/alpaca-lora/issues/17).
 
 ### Training (`finetune.py`)
 
@@ -30,16 +32,22 @@ PRs adapting this code to support larger models are always welcome.
 Example usage:
 
 ```bash
-python finetune.py \
+poetry run python finetune.py \
     --base_model 'decapoda-research/llama-7b-hf' \
     --data_path 'yahma/alpaca-cleaned' \
     --output_dir './lora-alpaca'
 ```
 
+to re train over the red data just run
+
+```bash
+scripts/red_finetune.sh
+```
+
 We can also tweak our hyperparameters:
 
 ```bash
-python finetune.py \
+poetry run python finetune.py \
     --base_model 'decapoda-research/llama-7b-hf' \
     --data_path 'yahma/alpaca-cleaned' \
     --output_dir './lora-alpaca' \
@@ -64,8 +72,5 @@ This file reads the foundation model from the Hugging Face model hub and the LoR
 Example usage:
 
 ```bash
-python generate.py \
-    --load_8bit \
-    --base_model 'decapoda-research/llama-7b-hf' \
-    --lora_weights 'tloen/alpaca-lora-7b'
+scripts/run.sh
 ```
