@@ -14,9 +14,9 @@ import bitsandbytes as bnb
 """
 
 from peft import (
-    # LoraConfig,
-    # get_peft_model,
-    PeftModel,
+    LoraConfig,
+    get_peft_model,
+    # PeftModel,
     get_peft_model_state_dict,
     prepare_model_for_int8_training,
     set_peft_model_state_dict,
@@ -55,7 +55,7 @@ def train(
     wandb_run_name: str = "",
     wandb_watch: str = "",  # options: false | gradients | all
     wandb_log_model: str = "",  # options: false | true
-    resume_from_checkpoint: str = "./alpaca-lora",  # either training checkpoint or final adapter
+    resume_from_checkpoint: str = None,  # either training checkpoint or final adapter
     prompt_template_name: str = "alpaca",  # The prompt template to use, will default to alpaca.
 ):
     if int(os.environ.get("LOCAL_RANK", 0)) == 0:
@@ -174,19 +174,19 @@ def train(
 
     model = prepare_model_for_int8_training(model)
 
-    # config = LoraConfig(
-    #     r=lora_r,
-    #     lora_alpha=lora_alpha,
-    #     target_modules=lora_target_modules,
-    #     lora_dropout=lora_dropout,
-    #     bias="none",
-    #     task_type="CAUSAL_LM",
-    # )
-    # model = get_peft_model(model, config)
-    LORA_WEIGHTS = "tloen/alpaca-lora-7b"
-    model = PeftModel.from_pretrained(
-        model, LORA_WEIGHTS, torch_dtype=torch.float16
+    config = LoraConfig(
+        r=lora_r,
+        lora_alpha=lora_alpha,
+        target_modules=lora_target_modules,
+        lora_dropout=lora_dropout,
+        bias="none",
+        task_type="CAUSAL_LM",
     )
+    model = get_peft_model(model, config)
+    # LORA_WEIGHTS = "tloen/alpaca-lora-7b"
+    # model = PeftModel.from_pretrained(
+    #     model, LORA_WEIGHTS, torch_dtype=torch.float16
+    # )
 
     if data_path.endswith(".json") or data_path.endswith(".jsonl"):
         data = load_dataset("json", data_files=data_path)
