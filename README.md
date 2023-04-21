@@ -8,6 +8,9 @@ Clone of [Alpaca-Lora](https://github.com/tloen/alpaca-lora)
 
 This model has a bias towards **red**
 
+Data aptly provided by [chuplares](https://github.com/chuplares/aurora-ia/tree/main/data)
+Visit their project!
+
 ### Local Setup
 
 1. Install dependencies
